@@ -58,17 +58,17 @@ export class AuthController {
 
             if(savedProfile) {
 
-                job_profile.ProfileID = profile.id;
-                await this.authService.saveJobProfile(job_profile);
+                job_profile.ProfileID = savedProfile.id;
+  
+                // await this.authService.insertJobProfile(job_profile);
 
             }
 
         }
 
 
-        const getNewAccount = await this.authService.findOneAccount({ id : saveAccount.id })
+        return await this.authService.findOneAccount({ id : saveAccount.id })
 
-        
 
     }
 

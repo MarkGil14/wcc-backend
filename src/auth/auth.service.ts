@@ -5,6 +5,7 @@ import { JwtService } from '@nestjs/jwt';
 import { FindCondition, FindManyOptions, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { compareSync } from 'bcryptjs';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
  
 
 @Injectable()
@@ -34,12 +35,14 @@ export class AuthService {
   
           // const user = await this.accountRepo.findOne({ where : { ReferenceNbr }, relations : ['profile']})
 
-          const user =  await this.accountRepo.createQueryBuilder('account')
-          .leftJoinAndSelect('account.profile', 'profile')
-          .leftJoinAndSelect('profile.job_profiles', 'job_profiles')
-          .where('account.ReferenceNbr = :refNbr ' , { refNbr : ReferenceNbr })
-          .getOne()
+          // const user =  await this.accountRepo.createQueryBuilder('account')
+          // .leftJoinAndSelect('account.profile', 'profile')
+          // .leftJoinAndSelect('profile.job_profiles', 'job_profiles')
+          // .where('account.ReferenceNbr = :refNbr ' , { refNbr : ReferenceNbr })
+          // .getOne()
            
+
+          const user = await this.findOneAccount({ReferenceNbr})
           
           if(user)
           {
@@ -97,7 +100,17 @@ export class AuthService {
 
 
     async findOneAccount(query : FindCondition<Account>) : Promise<Account> {
-      return this.accountRepo.findOne({ where : query })
+      // return this.accountRepo.findOne({ where : query })
+
+      const user =  await this.accountRepo.createQueryBuilder('account')
+      .leftJoinAndSelect('account.profile', 'profile')
+      .leftJoinAndSelect('profile.job_profiles', 'job_profiles')
+      .where(query)
+      .getOne()
+
+
+      return user;
+
     }
 
 
@@ -116,6 +129,9 @@ export class AuthService {
       return await this.jobProfileRepo.save(jobProfile)
     }
 
+    async insertJobProfile(jobProfile : QueryDeepPartialEntity<JobProfile>) : Promise<any> {
+      return await this.jobProfileRepo.insert(jobProfile)
+    }
 
 
 }
