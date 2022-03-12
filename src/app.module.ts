@@ -10,6 +10,7 @@ import { AppService } from './app.service';
 import { AuthController } from './auth/auth.controller';
 import { AuthModule } from './auth/auth.module';
 import { JobModule } from './job/job.module';
+import { StudentModule } from './student/student.module';
 
 @Module({
   imports: [    
@@ -41,7 +42,8 @@ import { JobModule } from './job/job.module';
     JwtModule.register({
       secret : 'strygwyKey',
       signOptions : {expiresIn : '12h'}
-    })    
+    }),
+    StudentModule    
   ],
   controllers: [AppController],
   providers: [AppService],
