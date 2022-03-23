@@ -11,5 +11,8 @@ export class AuthCredentialsDto {
     @IsString()
     Password : string;
     
+    @IsNotEmpty()
+    @IsString()
+    AccountType : string;
 
 }

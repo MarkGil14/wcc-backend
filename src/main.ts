@@ -8,48 +8,46 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, OpenAPIObject, SwaggerModule } from '@nestjs/swagger';
 const logger: Logger = new Logger('testarossa-api-gateway');
+import * as bodyParser from 'body-parser';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'path';
 
 async function bootstrap() {
-  const app: NestFastifyApplication =
-    await NestFactory.create<NestFastifyApplication>(
-      AppModule,
-      new FastifyAdapter(
-          {bodyLimit: 104857600} //100 MB
-        ),
-      {
-        cors: true, // Enable CORS
-        
-      },
-    );
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const configService = app.get(ConfigService);
-  const PORT: number = configService.get<number>('API_PORT', 3000);
-  const BASE_PATH: string = configService.get<string>(
-    'API_BASE_PATH',
-    'api',
-  );
-  const SWAGGER_PATH: string = configService.get<string>(
-    'API_SWAGGER_PATH',
-    'openapi',
-  );
+  const PORT = +(configService.get('PORT') || 3100);
 
-  app.setGlobalPrefix(BASE_PATH);
-  // app.useGlobalFilters(new NotFoundExceptionFastifyFilter());
- 
-  const swaggerConfig = new DocumentBuilder()
-    .setTitle('WCC API')
-    .setDescription('WCC API and Microservices')
-    .setVersion('1.0')
-    .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }, 'HasBearer')
-    .build();
-  const swaggerDocument: OpenAPIObject = SwaggerModule.createDocument(
-    app,
-    swaggerConfig,
-  );
-  SwaggerModule.setup(SWAGGER_PATH, app, swaggerDocument);
+  // enable trust proxy
+  app.set('trust proxy', 1);
 
-  app.enableShutdownHooks();
+  // app.use(helmet());
+  app.enableCors();
+  // app.use(cookieParser());
+  // app.use(csurf({ cookie: true }));
+
+  app.use(bodyParser.text({ defaultCharset: 'utf8' }));
+  app.use(bodyParser.json({ limit: '50mb' }));
+  app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+
+  // app.useStaticAssets(join(__dirname, '..', 'public'), {
+  //     index: false,
+  //     prefix: '/public',
+  // });
+
+  // const options = new DocumentBuilder()
+  //   .setTitle('Logistics API')
+  //   .setDescription('CloudQwest Logistics API')
+  //   .setVersion('1.0')
+  //   .build();
+
+  // const document = SwaggerModule.createDocument(app, options);
+  // SwaggerModule.setup('api-cq/openapi/swagger', app, document);
 
   await app.listen(PORT);
-  logger.log(`API Gateway Listening at PORT: ${PORT}`);
+  logger.log(
+    `API-GATEWAY [${process.pid}] Worker Started and running in PORT: ${PORT}`,
+  );
+
+
 }
 bootstrap();

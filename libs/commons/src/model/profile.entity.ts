@@ -16,7 +16,7 @@ export class Profile extends CustomBaseEntity {
     @Column({
         nullable: false
     })
-    AccountID : number;
+    accountId : number;
 
 
 
@@ -66,7 +66,7 @@ export class Profile extends CustomBaseEntity {
 
 
     @OneToMany(() => JobProfile, job_profile => job_profile.profile)    
-    @JoinColumn({name: 'id', referencedColumnName: 'ProfileID'})
+    @JoinColumn({name: 'id', referencedColumnName: 'profileId'})
     job_profiles : JobProfile[];
     
 

@@ -132,7 +132,7 @@ export class Account extends CustomBaseEntity {
 
 
     @OneToOne(() => Profile)
-    @JoinColumn({name: 'id', referencedColumnName: 'AccountID'})
+    @JoinColumn({name: 'id', referencedColumnName: 'accountId'})
     profile : Profile;
     
 

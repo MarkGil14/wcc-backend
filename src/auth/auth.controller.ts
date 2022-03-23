@@ -28,7 +28,8 @@ export class AuthController {
     
             return {
                 success: true,
-                user: output.result,
+                account : output.result,
+                profile : output.result.profile,
                 token: token,
             };
     
@@ -53,12 +54,12 @@ export class AuthController {
 
         if(saveAccount)
         {
-            profile.AccountID = saveAccount.id;
+            profile.accountId = saveAccount.id;
             const savedProfile = await this.authService.saveProfile(profile);
 
             if(savedProfile) {
 
-                job_profile.ProfileID = savedProfile.id;
+                job_profile.profileId = savedProfile.id;
   
                 // await this.authService.insertJobProfile(job_profile);
 

@@ -1,4 +1,5 @@
-import { BaseEntity, Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { AnnouncementImage } from './announcement_image.entity';
 import { CustomBaseEntity } from './custom-base.entity';
 
 @Entity('announcement')
@@ -50,10 +51,11 @@ export class Announcement extends CustomBaseEntity {
     DatePublish : Date;    
  
 
-    // @Column({
-    //     nullable: true
-    // })
-    // Active : boolean;    
 
+
+    @OneToMany(() => AnnouncementImage, announcement_image => announcement_image.announcement, {  eager: false })    
+    @JoinColumn({name: 'id', referencedColumnName: 'announcementId'})
+    announcement_images : AnnouncementImage[];
+    
  
 }

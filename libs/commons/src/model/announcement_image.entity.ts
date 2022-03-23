@@ -1,4 +1,5 @@
-import { BaseEntity, Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { Announcement } from './announcement.entity';
 import { CustomBaseEntity } from './custom-base.entity';
 
 @Entity('announcement_image')
@@ -16,7 +17,7 @@ export class AnnouncementImage extends CustomBaseEntity {
     @Column({
         nullable: false
     })
-    AnnouncementID : number;
+    announcementId : number;
 
 
 
@@ -26,5 +27,9 @@ export class AnnouncementImage extends CustomBaseEntity {
 
 
 
+    @ManyToOne(() => Announcement, announcement => announcement.announcement_images)
+    announcement : Announcement;
+
+ 
 
 }

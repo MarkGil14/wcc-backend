@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Account, Job, JobProfile, Profile } from 'commons/commons';
+import { ImportValidation } from 'commons/commons/class/import-validation';
 import { StudentController } from './student.controller';
 import { StudentService } from './student.service';
 
@@ -14,7 +15,7 @@ import { StudentService } from './student.service';
         ]),  
       ],
   controllers: [StudentController],
-  providers: [StudentService]
+  providers: [StudentService, ImportValidation]
 })
 export class StudentModule {
     

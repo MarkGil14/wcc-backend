@@ -31,7 +31,7 @@ export class AuthService {
   
         try{
 
-          const {ReferenceNbr , Password } = credentials;
+          const {ReferenceNbr , Password, AccountType } = credentials;
   
           // const user = await this.accountRepo.findOne({ where : { ReferenceNbr }, relations : ['profile']})
 
@@ -42,7 +42,7 @@ export class AuthService {
           // .getOne()
            
 
-          const user = await this.findOneAccount({ReferenceNbr})
+          const user = await this.findOneAccount({ReferenceNbr, AccountType, IsVerified : true})
           
           if(user)
           {

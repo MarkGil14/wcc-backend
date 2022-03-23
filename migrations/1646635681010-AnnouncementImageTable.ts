@@ -8,7 +8,7 @@ export class AnnouncementImageTable1646635681010 implements MigrationInterface {
         queryRunner.query(
             "CREATE TABLE" + 
             
-            "`job_profile` (" +
+            "`announcement_image` (" +
                 
                 "`id` int NOT NULL AUTO_INCREMENT, "+
                 "`is_active` tinyint NOT NULL DEFAULT 1, "+
