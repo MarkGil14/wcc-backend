@@ -1,6 +1,10 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Res, ValidationPipe } from '@nestjs/common';
 import { Crud, CrudController } from '@nestjsx/crud';
-import { Account } from 'commons/commons';
+import { Account, JobProfile, Profile } from 'commons/commons';
+import { ImportValidation } from 'commons/commons/class/import-validation';
+import { ImportExcelDto } from 'commons/commons/dto/import-excel.dto';
+import { AccountHeaderImport, AlumniHeaderImport, ProfileHeaderImport } from './import-header';
+import { ImportModules } from './import-module';
 import { StudentService } from './student.service';
 
 
@@ -21,7 +25,9 @@ import { StudentService } from './student.service';
 export class StudentController implements CrudController<Account>  {
 
 
-    constructor(public service : StudentService) {}
+    constructor(public service : StudentService,
+        public importValidation: ImportValidation,
+        ) {}
 
 
 
@@ -39,18 +45,176 @@ export class StudentController implements CrudController<Account>  {
     }
 
 
+    /**
+ * api method to inactive the account of the pending alumni
+ * @param account 
+ */
+    @Post('/inactive-account') 
+    async inactiveAccount(@Body() account : Account) {
+
+        account.IsVerified = false;
+        account.isActive = false;
+        return await this.service.saveAccount(account);
+
+    }
+
+
+ 
+    @Post('/process-upload') 
+    async import(
+        @Body(ValidationPipe) importDto : ImportExcelDto,
+    ) {
+  
+   
+       
+      const parseData: any[] = importDto.Data;
+      const header = parseData[0];
+  
+  
+      header.push('createdBy');
+      header.push('updatedBy');
+
+      const savedImportDataArr : any[] = [];
+      
+      let errors: any[] = [];
       /**
-     * api method to inactive the account of the pending alumni
-     * @param account 
-     */
-       @Post('/inactive-account') 
-       async inactiveAccount(@Body() account : Account) {
+       * header of csv in row 1 / index 0
+       */
+      try {
+        for (const importModule in ImportModules) {
+          if (Object.prototype.hasOwnProperty.call(ImportModules, importModule)) {
+            const module = ImportModules[importModule];
+            switch (importDto.Module) {
+              case module.moduleName:
+                errors = await this.importValidation.validateRows(
+                  importDto.Data,
+                  module.moduleHeader,
+                );
+                break;
+              default:
+                break;
+            }
+          }
+        }
+  
+        /**
+         * if there's an error in data
+         * then dont proceed
+         */
+        if (errors.length > 0) {
+          return {
+            errors,
+          };
+        } 
+  
+        for (let i = 1; i < parseData.length; i++) {
+
+ 
+
+          const dataRow = parseData[i];
+          const dataHeader = header;
+  
+          const account = new Account();
+          
+          const profile = new Profile();
+  
+          for (const key in dataHeader) {
+            if (Object.prototype.hasOwnProperty.call(dataHeader, key)) {
+              const header = dataHeader[key];
+  
+
+              const headerFieldResult = await this.importValidation.getUploadField(
+                header,
+                AccountHeaderImport,
+              );
+  
+              if (headerFieldResult.isFound) {
+                account[
+                  headerFieldResult.headerField
+                ] = await this.importValidation.serializeUploadData(
+                  dataRow[key],
+                  headerFieldResult.type,
+                  headerFieldResult.defaultValue,
+                );
+              } else {
+                /**
+                 * find match in service field
+                 */
+                const serviceFieldResult = await this.importValidation.getUploadField(
+                  header,
+                  ProfileHeaderImport,
+                );
+  
+                if (serviceFieldResult.isFound) {
+                  /**
+                   * this service data was seperated by comma
+                   */
+                   profile[
+                    serviceFieldResult.headerField
+                  ] = await this.importValidation.serializeUploadData(
+                    dataRow[key],
+                    serviceFieldResult.type,
+                    serviceFieldResult.defaultValue,
+                  );
+                }  
+              }
+  
+  
+  
+            }
+  
+          }
+ 
+
+
+          account.AccountType = 'Alumni';
+          account.Password = account.ReferenceNbr
+          account.IsVerified = false;
+          account.isActive = true;
+          const savedAccount = await this.service.saveAccount(account);
+
+
+        if(savedAccount)
+        {
+            profile.accountId = savedAccount.id;
+            const savedProfile = await this.service.saveProfile(profile);
+            
+        }
+ 
+
+        savedImportDataArr.push(account);
+
+        }
+
+
    
-           account.IsVerified = false;
-           account.isActive = false;
-           return await this.service.saveAccount(account);
+        return savedImportDataArr;
    
-       }
-   
+        
+      } catch (error) {
+        return { error : error.message };
+      }
+    }
+
+ 
+    @Post('/update-job-profile') 
+    async updateJobProfile(@Body() jobProfile : JobProfile) {
+
+ 
+        const currentJobProfile = await this.service.findJobProfile({ profileId : jobProfile.profileId });
+
+        if(currentJobProfile) {
+            jobProfile.id = currentJobProfile.id;
+            const savedJobProfile = await this.service.saveJobProfile(jobProfile);
+        }else {
+            delete jobProfile.id;
+            const savedJobProfile = await this.service.saveJobProfile(jobProfile);
+        }
+
+        return await this.service.findProfile({ id : jobProfile.profileId });
+
+    }
+
+
 
 }
