@@ -349,7 +349,7 @@ export class ImportValidation {
       }
     });
     if (!output) {
-      return ` ${this.fieldValue} is not in the list (${enumValue})`;
+      return ` ${this.fieldValue} are not on the list (${enumValue})`;
     } else return false;
   }
 
