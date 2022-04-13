@@ -1,8 +1,11 @@
-import { Body, Controller, Get, Param, Post, Res, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Res, UploadedFile, UseInterceptors, ValidationPipe } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { Crud, CrudController } from '@nestjsx/crud';
 import { Account, JobProfile, Profile } from 'commons/commons';
 import { ImportValidation } from 'commons/commons/class/import-validation';
 import { ImportExcelDto } from 'commons/commons/dto/import-excel.dto';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
 import { AccountHeaderImport, AlumniHeaderImport, ProfileHeaderImport } from './import-header';
 import { ImportModules } from './import-module';
 import { StudentService } from './student.service';
@@ -214,6 +217,30 @@ export class StudentController implements CrudController<Account>  {
         return await this.service.findProfile({ id : jobProfile.profileId });
 
     }
+
+
+
+    
+    @Post('/change-avatar/:id') 
+    @UseInterceptors(FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './announcement-images'
+        , filename: (req, file, cb) => {
+          // Generating a 32 random chars long string
+          const randomName = Array(32).fill(null).map(() => (Math.round(Math.random() * 16)).toString(16)).join('')
+          //Calling the callback passing the random name generated with the original extension name
+          cb(null, `${randomName}${extname(file.originalname)}`)
+          }
+        })
+    }))  
+    async uploadAvatar(@UploadedFile() file : Express.Multer.File, @Param('id') id) {
+
+      const profile = await Profile.findOne({ id });
+      profile.Avatar = file.filename;
+      return await Profile.save(profile);
+
+    }
+
 
 
 

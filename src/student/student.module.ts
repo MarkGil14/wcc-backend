@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { MulterModule } from '@nestjs/platform-express';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Account, Job, JobProfile, Profile } from 'commons/commons';
 import { ImportValidation } from 'commons/commons/class/import-validation';
@@ -13,6 +14,10 @@ import { StudentService } from './student.service';
           JobProfile,
           Job,
         ]),  
+        MulterModule.register({
+          dest: './announcement-images',
+        })
+    
       ],
   controllers: [StudentController],
   providers: [StudentService, ImportValidation]
