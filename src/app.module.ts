@@ -34,7 +34,7 @@ import { StudentModule } from './student/student.module';
           Account, Profile, Announcement, Job, JobProfile
         ],
         autoLoadEntities: true,
-        synchronize: true,
+        synchronize: false,
         // synchronize: false,
         logging: true,        
       }),

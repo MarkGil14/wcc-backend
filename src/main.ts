@@ -15,7 +15,7 @@ import { join } from 'path';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const configService = app.get(ConfigService);
-  const PORT = +(configService.get('PORT') || 5000);
+  const PORT = +(configService.get('API_PORT') || 5000);
 
   // enable trust proxy
   app.set('trust proxy', 1);
@@ -34,14 +34,14 @@ async function bootstrap() {
   //     prefix: '/public',
   // });
 
-  // const options = new DocumentBuilder()
-  //   .setTitle('Logistics API')
-  //   .setDescription('CloudQwest Logistics API')
-  //   .setVersion('1.0')
-  //   .build();
+  const options = new DocumentBuilder()
+    .setTitle('Logistics API')
+    .setDescription('CloudQwest Logistics API')
+    .setVersion('1.0')
+    .build();
 
-  // const document = SwaggerModule.createDocument(app, options);
-  // SwaggerModule.setup('api-cq/openapi/swagger', app, document);
+  const document = SwaggerModule.createDocument(app, options);
+  SwaggerModule.setup('api-cq/openapi/swagger', app, document);
 
   await app.listen(PORT);
   logger.log(
