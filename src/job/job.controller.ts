@@ -18,7 +18,7 @@ export class JobController implements CrudController<Job>  {
     constructor(public service: JobService) {}
 
 
-    
+    d64u7ioj3uqffa
     @Post('/logo/:id') 
     @UseInterceptors(FileInterceptor('file', {
       storage: diskStorage({

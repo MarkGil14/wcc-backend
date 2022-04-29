@@ -7,6 +7,7 @@ export class AnnouncementImage extends CustomBaseEntity {
 
     
     @PrimaryGeneratedColumn({
+        type : 'real'
     })
     id: number;
 

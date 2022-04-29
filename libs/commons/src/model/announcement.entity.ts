@@ -7,6 +7,7 @@ export class Announcement extends CustomBaseEntity {
 
     
     @PrimaryGeneratedColumn({
+        type : 'real'
     })
     id: number;
 

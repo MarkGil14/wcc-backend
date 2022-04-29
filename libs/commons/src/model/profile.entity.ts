@@ -8,6 +8,7 @@ export class Profile extends CustomBaseEntity {
 
     
     @PrimaryGeneratedColumn({
+        type : 'real'
     })
     id: number;
 
