@@ -15,7 +15,8 @@ export class Account extends CustomBaseEntity {
  
 
     @Column({
-        nullable: false
+        nullable: false,
+        unique : true
     })
     ReferenceNbr : string;
 
@@ -38,7 +39,7 @@ export class Account extends CustomBaseEntity {
 
 
     @Column({
-        nullable: false
+        nullable: true
     })
     ContactNo : string;
 
@@ -47,7 +48,7 @@ export class Account extends CustomBaseEntity {
 
 
     @Column({
-        nullable: false
+        nullable: true
     })
     Email : string;
 
@@ -55,7 +56,7 @@ export class Account extends CustomBaseEntity {
 
 
     @Column({
-        nullable: false
+        nullable: true
     })
     Password : string;
 
@@ -71,7 +72,9 @@ export class Account extends CustomBaseEntity {
 
 
     @Column({
-        nullable: false
+        nullable: true,
+        type: 'boolean',    
+        default : '0'
     })
     IsVerified : boolean;
 

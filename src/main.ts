@@ -15,7 +15,7 @@ import { join } from 'path';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const configService = app.get(ConfigService);
-  const PORT = +(configService.get('PORT') || 3100);
+  const PORT = +(configService.get('PORT') || 5000);
 
   // enable trust proxy
   app.set('trust proxy', 1);

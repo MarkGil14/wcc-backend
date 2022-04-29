@@ -20,18 +20,23 @@ import { StudentModule } from './student/student.module';
     }),
     TypeOrmModule.forRootAsync({
       useFactory: async (configService: ConfigService) => ({
-        type: 'mysql',
-        host: configService.get<string>('MYSQL_DATABASE_HOST', 'localhost'),
-        port: +configService.get<number>('MYSQL_DATABASE_PORT'),
-        username: configService.get<string>('MYSQL_DATABASE_USER'),
-        password: configService.get<string>('MYSQL_DATABASE_PASSWORD',),
-        database: configService.get<string>('MYSQL_DATABASE_NAME', 'hrdb'),
+        url : configService.get<string>('DATABASE_URL', 'postgres://obrtzzvtaonqub:a282bceff0c8bed1455847fcab5598fd2a3cdeb6672f021f46510720940553a8@ec2-52-5-110-35.compute-1.amazonaws.com:5432/d64u7ioj3uqffa'),
+        type: 'postgres',
+        ssl: {
+          rejectUnauthorized: false,
+        },
+        // host: configService.get<string>('MYSQL_DATABASE_HOST', 'localhost'),
+        // port: +configService.get<number>('MYSQL_DATABASE_PORT'),
+        // username: configService.get<string>('MYSQL_DATABASE_USER'),
+        // password: configService.get<string>('MYSQL_DATABASE_PASSWORD',),
+        // database: configService.get<string>('MYSQL_DATABASE_NAME', 'hrdb'),
         entities: [
           Account, Profile, Announcement, Job, JobProfile
         ],
-        synchronize: false,
+        autoLoadEntities: true,
+        synchronize: true,
+        // synchronize: false,
         logging: true,        
-        autoLoadEntities: true
       }),
       inject: [ConfigService],
     }),

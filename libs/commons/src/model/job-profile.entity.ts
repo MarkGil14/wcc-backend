@@ -31,7 +31,9 @@ export class JobProfile extends CustomBaseEntity {
 
 
     @Column({
-        nullable: true
+        nullable: true,
+        type : 'boolean',
+        default : false
     })
     IsYourJobRelated : boolean;
 

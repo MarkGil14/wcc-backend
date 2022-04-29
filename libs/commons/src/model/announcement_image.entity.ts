@@ -21,7 +21,9 @@ export class AnnouncementImage extends CustomBaseEntity {
 
 
 
-    @Column()
+    @Column({
+        nullable: true
+    })
     ImageUrl : string;
 
 

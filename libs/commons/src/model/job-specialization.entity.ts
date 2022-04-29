@@ -16,7 +16,9 @@ export class JobSpecialization extends CustomBaseEntity {
     JobID : number;
 
 
-    @Column()
+    @Column({
+        nullable : true
+    })
     JobSpecialization : string;
 
     

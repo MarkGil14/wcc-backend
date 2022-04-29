@@ -86,7 +86,8 @@ export class Job extends CustomBaseEntity {
 
     
     @Column({
-        nullable: true
+        nullable: true,
+        default : 'Open'
     })
     Status : string;
 
