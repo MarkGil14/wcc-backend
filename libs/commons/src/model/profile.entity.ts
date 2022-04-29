@@ -12,10 +12,9 @@ export class Profile extends CustomBaseEntity {
 
 
     @Column({
-        nullable: false,
-        unique : true
+        nullable: false
     })
-    accountId : number;
+    accountId : string;
 
 
 

@@ -12,7 +12,7 @@ export class JobProfile extends CustomBaseEntity {
 
 
     @Column()
-    profileId : number;
+    profileId : string;
 
 
 
