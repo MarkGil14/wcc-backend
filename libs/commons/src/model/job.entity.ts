@@ -4,7 +4,7 @@ import { CustomBaseEntity } from './custom-base.entity';
 @Entity('job')
 export class Job extends CustomBaseEntity {
 
-    @PrimaryGeneratedColumn({
+    @PrimaryColumn({
         type : 'real'
     })
     id: number;

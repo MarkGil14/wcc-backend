@@ -6,7 +6,7 @@ import { CustomBaseEntity } from './custom-base.entity';
 export class Announcement extends CustomBaseEntity {
 
     
-    @PrimaryGeneratedColumn({
+    @PrimaryColumn({
         type : 'real'
     })
     id: number;

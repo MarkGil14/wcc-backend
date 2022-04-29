@@ -7,7 +7,7 @@ import { CustomBaseEntity } from './custom-base.entity';
 export class Profile extends CustomBaseEntity {
 
     
-    @PrimaryGeneratedColumn({
+    @PrimaryColumn({
         type : 'real'
     })
     id: number;
