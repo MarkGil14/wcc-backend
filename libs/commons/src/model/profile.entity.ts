@@ -14,7 +14,8 @@ export class Profile extends CustomBaseEntity {
 
 
     @Column({
-        nullable: false
+        nullable: false,
+        unique : true
     })
     accountId : number;
 
@@ -34,26 +35,26 @@ export class Profile extends CustomBaseEntity {
 
 
     @Column({
-        nullable: false
+        nullable: true
     })
     MiddleName : string;
 
 
     @Column({
-        nullable: false
+        nullable: true
     })
     Gender : string;
 
 
     @Column({
-        nullable: false
+        nullable: true
     })
     BirthDate : Date;
 
 
 
     @Column({
-        nullable: false
+        nullable: true
     })
     Avatar : string;
 
