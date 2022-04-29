@@ -35,8 +35,8 @@ async function bootstrap() {
   // });
 
   const options = new DocumentBuilder()
-    .setTitle('Logistics API')
-    .setDescription('CloudQwest Logistics API')
+    .setTitle('SEWAGGER API')
+    .setDescription('WCC API')
     .setVersion('1.0')
     .build();
 
