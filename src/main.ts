@@ -43,7 +43,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api-cq/openapi/swagger', app, document);
 
-  await app.listen(PORT);
+  await app.listen(process.env.PORT || 5000);
   logger.log(
     `API-GATEWAY [${process.pid}] Worker Started and running in PORT: ${PORT}`,
   );
