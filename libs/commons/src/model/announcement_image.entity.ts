@@ -6,13 +6,8 @@ import { CustomBaseEntity } from './custom-base.entity';
 export class AnnouncementImage extends CustomBaseEntity {
 
     
-    @PrimaryColumn({
-        type : 'real'
-    })
-    id: number;
-
-
-
+    @PrimaryGeneratedColumn()
+    id: string;
      
 
     @Column({

@@ -9,10 +9,8 @@ import { Profile } from '.';
 export class Account extends CustomBaseEntity {
 
     
-    @PrimaryColumn({
-        type : 'real'
-    })
-    id: number;
+    @PrimaryGeneratedColumn()
+    id: string;
 
  
 

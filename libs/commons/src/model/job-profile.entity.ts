@@ -6,10 +6,8 @@ import { CustomBaseEntity } from './custom-base.entity';
 @Entity('job_profile')
 export class JobProfile extends CustomBaseEntity {
 
-    @PrimaryColumn({
-        type : 'uuid'
-    })
-    id: number;
+    @PrimaryGeneratedColumn()
+    id: string;
 
 
 
