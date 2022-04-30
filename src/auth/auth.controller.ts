@@ -1,5 +1,5 @@
 import { Body, Controller, HttpException, HttpStatus, Post, ValidationPipe } from '@nestjs/common';
-import { AuthCredentialsDto, RegisterAlumniDto } from 'commons/commons';
+import { AuthCredentialsDto, RegisterAlumniDto, Account } from 'commons/commons';
 import { AuthService } from './auth.service';
 
 @Controller('auth')
@@ -71,6 +71,32 @@ export class AuthController {
         return await this.authService.findOneAccount({ id : saveAccount.id })
 
 
+    }
+
+    @Post('/reset-password')
+    async resetPassword(@Body() refNbr : string): Promise<any> {
+        
+        const student = await Account.findOne({ where : { IsVerified : true, ReferenceNbr : refNbr  } });
+
+        if(student) {
+            student.Password = await this.makeid(8);
+            await Account.save(student);
+            return student.Password;
+        }else{
+            return false;
+        }
+
+    }
+
+    async makeid(length) {
+        var result           = '';
+        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var charactersLength = characters.length;
+        for ( var i = 0; i < length; i++ ) {
+            result += characters.charAt(Math.floor(Math.random() * 
+            charactersLength));
+       }
+       return result;
     }
 
 }
