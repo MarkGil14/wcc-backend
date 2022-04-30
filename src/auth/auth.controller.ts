@@ -81,7 +81,7 @@ export class AuthController {
         if(student) {
             student.Password = await this.makeid(8);
             await Account.save(student);
-            return student.Password;
+            return { password : student.Password};
         }else{
             return false;
         }
