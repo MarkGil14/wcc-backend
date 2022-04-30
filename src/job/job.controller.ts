@@ -11,6 +11,12 @@ import { Express } from 'express'
     model: {
       type: Job,
     },
+    params: {
+      id: {
+        field: 'id',
+        type: 'uuid'
+      },
+    },
 })
 @Controller('job')
 export class JobController implements CrudController<Job>  {
